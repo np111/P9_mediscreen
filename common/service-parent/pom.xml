@@ -58,6 +58,11 @@
                 <artifactId>mapstruct-processor</artifactId>
                 <version>${mapstruct.version}</version>
               </path>
+              <path>
+                <groupId>com.mediscreen</groupId>
+                <artifactId>mediscreen-common-mapstruct-spi</artifactId>
+                <version>${project.version}</version>
+              </path>
             </annotationProcessorPaths>
           </configuration>
         </plugin>

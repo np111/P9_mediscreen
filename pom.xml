@@ -10,6 +10,7 @@
   <name>${project.artifactId}</name>
 
   <modules>
+    <module>common/mapstruct-spi</module>
     <module>common/api</module>
     <module>common/util</module>
     <module>common/spring</module>
@@ -69,6 +70,17 @@
         <artifactId>mapstruct</artifactId>
         <version>${mapstruct.version}</version>
       </dependency>
+      <dependency>
+        <groupId>org.mapstruct</groupId>
+        <artifactId>mapstruct-processor</artifactId>
+        <version>${mapstruct.version}</version>
+      </dependency>
+      <!-- * Google libphonenumber -->
+      <dependency>
+        <groupId>com.googlecode.libphonenumber</groupId>
+        <artifactId>libphonenumber</artifactId>
+        <version>${libphonenumber.version}</version>
+      </dependency>
       <!-- * JUnit 5 -->
       <dependency>
         <groupId>org.junit.jupiter</groupId>
@@ -108,16 +120,6 @@
       <dependency>
         <groupId>com.mediscreen</groupId>
         <artifactId>mediscreen-common-spring</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.mediscreen</groupId>
-        <artifactId>mediscreen-patients-api</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.mediscreen</groupId>
-        <artifactId>mediscreen-patients-service</artifactId>
         <version>${project.version}</version>
       </dependency>
     </dependencies>

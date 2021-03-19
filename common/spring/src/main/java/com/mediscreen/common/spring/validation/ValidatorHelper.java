@@ -10,4 +10,11 @@ public class ValidatorHelper {
         ctx.buildConstraintViolationWithTemplate(ctx.getDefaultConstraintMessageTemplate() + " (" + details + ")").addConstraintViolation();
         return false;
     }
+
+    public static boolean checkMaxLength(ConstraintValidatorContext ctx, int value, int maxLength) {
+        if (value > maxLength) {
+            return ValidatorHelper.failWithDetails(ctx, "too long - max length: " + maxLength);
+        }
+        return true;
+    }
 }
