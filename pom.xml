@@ -15,6 +15,8 @@
     <module>common/util</module>
     <module>common/spring</module>
     <module>common/service-parent</module>
+    <module>patients/api</module>
+    <module>patients/service</module>
   </modules>
 
   <properties>
@@ -43,6 +45,7 @@
     <junit-platform.version>1.7.1</junit-platform.version>
     <mockito-junit-jupiter.version>3.8.0</mockito-junit-jupiter.version>
     <libphonenumber.version>8.12.20</libphonenumber.version>
+    <springdoc-openapi.version>1.5.6</springdoc-openapi.version>
     <jacoco.version>0.8.6</jacoco.version>
   </properties>
 
@@ -80,6 +83,12 @@
         <groupId>com.googlecode.libphonenumber</groupId>
         <artifactId>libphonenumber</artifactId>
         <version>${libphonenumber.version}</version>
+      </dependency>
+      <!-- * Springdoc-OpenAPI -->
+      <dependency>
+        <groupId>org.springdoc</groupId>
+        <artifactId>springdoc-openapi-webmvc-core</artifactId>
+        <version>${springdoc-openapi.version}</version>
       </dependency>
       <!-- * JUnit 5 -->
       <dependency>
@@ -120,6 +129,16 @@
       <dependency>
         <groupId>com.mediscreen</groupId>
         <artifactId>mediscreen-common-spring</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.mediscreen</groupId>
+        <artifactId>mediscreen-patients-api</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.mediscreen</groupId>
+        <artifactId>mediscreen-patients-service</artifactId>
         <version>${project.version}</version>
       </dependency>
     </dependencies>

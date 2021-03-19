@@ -1,8 +1,9 @@
-module mediscreen.common.api {
+module mediscreen.patients.api {
     requires static java.desktop; // for lombok.anyConstructor.addConstructorProperties
     requires static java.validation;
     requires static lombok;
 
-    exports com.mediscreen.common.api.model;
-    exports com.mediscreen.common.api.validation.group;
+    requires mediscreen.common.api;
+
+    exports com.mediscreen.patients.api.model;
 }

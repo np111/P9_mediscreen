@@ -1,0 +1,9 @@
+---
+server:
+  port: '${SERVER_PORT:8081}'
+
+spring:
+  datasource:
+    url: 'jdbc:mariadb://${MARIADB_HOST:localhost}:${MARIADB_PORT:12161}/${MARIADB_DATABASE:mediscreen-patients}?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC'
+    username: '${MARIADB_USERNAME:mediscreen}'
+    password: '${MARIADB_PASSWORD:mediscreen}'

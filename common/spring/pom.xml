@@ -31,13 +31,13 @@
     </dependency>
     <!-- * Starter Web -->
     <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
-    <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
     <!-- * Starter Json -->
     <dependency>
@@ -61,6 +61,12 @@
       <groupId>org.mapstruct</groupId>
       <artifactId>mapstruct</artifactId>
       <scope>provided</scope>
+    </dependency>
+
+    <!-- Springdoc OpenAPI -->
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-webmvc-core</artifactId>
     </dependency>
   </dependencies>
 </project>

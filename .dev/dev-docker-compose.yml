@@ -1,0 +1,12 @@
+---
+version: '3'
+services:
+  sqldb:
+    image: mariadb:10.5
+    ports:
+      - '12161:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: rootroot
+      MYSQL_USER: mediscreen
+      MYSQL_PASSWORD: mediscreen
+      MYSQL_DATABASE: mediscreen-patients
