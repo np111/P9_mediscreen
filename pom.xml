@@ -13,12 +13,15 @@
     <module>common/mapstruct-spi</module>
     <module>common/api</module>
     <module>common/util</module>
+    <module>common/restclient</module>
     <module>common/spring</module>
     <module>common/service-parent</module>
     <module>patients/api</module>
     <module>patients/service</module>
     <module>notes/api</module>
     <module>notes/service</module>
+    <module>assessment/api</module>
+    <module>assessment/service</module>
   </modules>
 
   <properties>
@@ -140,6 +143,11 @@
       </dependency>
       <dependency>
         <groupId>com.mediscreen</groupId>
+        <artifactId>mediscreen-common-restclient</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.mediscreen</groupId>
         <artifactId>mediscreen-common-spring</artifactId>
         <version>${project.version}</version>
       </dependency>
@@ -161,6 +169,16 @@
       <dependency>
         <groupId>com.mediscreen</groupId>
         <artifactId>mediscreen-notes-service</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.mediscreen</groupId>
+        <artifactId>mediscreen-assessment-api</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.mediscreen</groupId>
+        <artifactId>mediscreen-assessment-service</artifactId>
         <version>${project.version}</version>
       </dependency>
     </dependencies>
