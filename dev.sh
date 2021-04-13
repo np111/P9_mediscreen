@@ -15,6 +15,7 @@ function print_usage() {
   echo "${green} docker logs${reset}           Print development containers logs"
   echo "${green} iso3166-update${reset}        Update ISO 3166 data"
   echo "${green} db-migration <desc>${reset}   Print flyway database migration filename"
+  echo "${green} db-changelog <desc>${reset}   Print mongobee migration (changelog) filename"
 }
 
 function main() {
@@ -31,6 +32,9 @@ function main() {
     ;;
   db-migration)
     .dev/db-migration.sh "$@"
+    ;;
+  db-changelog)
+    .dev/db-changelog.sh "$@"
     ;;
   iso3166-update)
     .dev/iso3166-update.sh "$@"

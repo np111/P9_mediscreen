@@ -10,3 +10,10 @@ services:
       MYSQL_USER: mediscreen
       MYSQL_PASSWORD: mediscreen
       MYSQL_DATABASE: mediscreen-patients
+  mongodb:
+    image: mongo:4.4
+    ports:
+      - '12162:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mediscreen
+      MONGO_INITDB_ROOT_PASSWORD: mediscreen

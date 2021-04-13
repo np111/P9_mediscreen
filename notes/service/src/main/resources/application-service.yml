@@ -1,0 +1,12 @@
+---
+server:
+  port: '${SERVER_PORT:8082}'
+
+spring:
+  data:
+    mongodb:
+      uri: '${MONGODB_URI:mongodb://mediscreen:mediscreen@localhost:12162/mediscreen?authSource=admin}'
+
+mongock:
+  change-logs-scan-package:
+    - com.mediscreen.notes.persistence.changelog
