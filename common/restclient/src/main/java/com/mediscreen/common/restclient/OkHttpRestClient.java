@@ -1,14 +1,13 @@
 package com.mediscreen.common.restclient;
 
-import com.mediscreen.common.api.model.ApiError;
+import com.mediscreen.common.util.StringBuilderWriter;
 import java.io.IOException;
 import java.io.Reader;
-import java.io.StringWriter;
 import java.time.Duration;
 import java.util.Iterator;
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BiConsumer;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.ConnectionPool;
@@ -20,19 +19,29 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class OkHttpRestClient implements RestClient {
-    private static final MediaType APPLICATION_JSON = MediaType.parse("application/json; charset=utf-8");
+/**
+ * A {@link RestClient} implementation using the OkHttp library.
+ */
+public class OkHttpRestClient extends AbstractRestClient {
+    private static final MediaType OKHTTP_CONTENT_TYPE = MediaType.parse(AbstractRestClient.CONTENT_TYPE);
 
     private final HttpUrl baseUrl;
     private final RestSerializer serializer;
     private final OkHttpClient httpClient;
 
+    /**
+     * @param baseUrl            Base url of the target service (eg. "https://api.example.com/v1/").
+     * @param serializer         Serializer to be used to encode/decode body.
+     * @param maxRequests        Maximum number of queries to run simultaneously (others will be queued; default: 64)
+     * @param maxIdleConnections Maximum number of idle connections to keep open for future use (default: 5)
+     * @param keepAliveDuration  HTTP keep alive duration.
+     * @param callTimeout        Maximum duration of a call before timeout.
+     */
     @lombok.Builder
     private OkHttpRestClient(
             String baseUrl,
             RestSerializer serializer,
             Integer maxRequests,
-            Integer maxRequestsPerHost,
             Integer maxIdleConnections,
             Duration keepAliveDuration,
             Duration callTimeout
@@ -40,7 +49,6 @@ public class OkHttpRestClient implements RestClient {
         Objects.requireNonNull(baseUrl, "baseUrl cannot be null");
         Objects.requireNonNull(serializer, "serializer cannot be null");
         maxRequests = initDefault(maxRequests, 64);
-        maxRequestsPerHost = initDefault(maxRequestsPerHost, maxRequests);
         maxIdleConnections = initDefault(maxIdleConnections, 5);
         keepAliveDuration = initDefault(keepAliveDuration, Duration.ofMinutes(5));
         callTimeout = initDefault(callTimeout, Duration.ofSeconds(30));
@@ -49,21 +57,34 @@ public class OkHttpRestClient implements RestClient {
         this.serializer = serializer;
         Dispatcher dispatcher = new Dispatcher();
         dispatcher.setMaxRequests(maxRequests);
-        dispatcher.setMaxRequestsPerHost(maxRequestsPerHost);
-        this.httpClient = new OkHttpClient.Builder()
+        dispatcher.setMaxRequestsPerHost(maxRequests);
+        OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder()
                 .connectionPool(new ConnectionPool(maxIdleConnections, keepAliveDuration.toMillis(), TimeUnit.MILLISECONDS))
                 .dispatcher(dispatcher)
                 .callTimeout(callTimeout)
                 .connectTimeout(Duration.ofSeconds(10))
                 .readTimeout(Duration.ZERO)
-                .writeTimeout(Duration.ZERO)
-                .build();
+                .writeTimeout(Duration.ZERO);
+        customizeOkHttpClient(httpClientBuilder);
+        this.httpClient = httpClientBuilder.build();
+    }
+
+    /**
+     * An overridable method to customize the underlying OkHttp client in an advanced way.
+     */
+    public void customizeOkHttpClient(OkHttpClient.Builder builder) {
     }
 
     @Override
-    public <T> CompletableFuture<RestResponse<T>> call(RestCall<T> call) {
+    protected RestSerializer getSerializer() {
+        return serializer;
+    }
+
+    @Override
+    protected <T> void doCall(RestCall<T> call, BiConsumer<Throwable, HttpResponse> callback) {
         Request.Builder req = new Request.Builder();
 
+        // Set url
         HttpUrl.Builder url = baseUrl.newBuilder();
         call.paths.forEach(url::addPathSegment);
         for (Iterator<String> it = call.queryParams.iterator(); it.hasNext(); ) {
@@ -73,65 +94,50 @@ public class OkHttpRestClient implements RestClient {
         }
         req.url(url.build());
 
+        // Set method and body
         req.method(call.method, createBody(call.body));
 
-        CompletableFuture<RestResponse<T>> ret = new CompletableFuture<>();
-        httpClient
-                .newCall(req.build())
-                .enqueue(new Callback() {
-                    @SuppressWarnings("unchecked")
+        // Run the call
+        httpClient.newCall(req.build()).enqueue(new Callback() {
+            @Override
+            public void onResponse(Call okCall, Response response) {
+                callback.accept(null, new HttpResponse() {
                     @Override
-                    public void onResponse(Call okCall, Response response) {
-                        //noinspection TryFinallyCanBeTryWithResources
-                        try {
-                            int httpStatus = response.code();
-                            switch (httpStatus / 100) {
-                                case 2:
-                                    Object bodyObj;
-                                    if (httpStatus == 204) {
-                                        bodyObj = null;
-                                    } else {
-                                        Reader body = Objects.requireNonNull(response.body()).charStream();
-                                        bodyObj = call.responseIsList ? serializer.deserializeList(body, call.responseType) : serializer.deserialize(body, call.responseType);
-                                    }
-                                    ret.complete(new SuccessRestResponse<>((T) bodyObj));
-                                    break;
-
-                                case 4:
-                                    Reader body = Objects.requireNonNull(response.body()).charStream();
-                                    ApiError apiError = serializer.deserialize(body, ApiError.class);
-                                    ret.complete(new FailureRestResponse<>(apiError));
-                                    break;
-
-                                default:
-                                    throw new IllegalStateException("Unsupported HTTP status: " + httpStatus);
-                            }
-                        } catch (Throwable ex) {
-                            ret.completeExceptionally(ex);
-                        } finally {
-                            response.close();
-                        }
+                    public int getStatusCode() {
+                        return response.code();
                     }
 
                     @Override
-                    public void onFailure(Call okCall, IOException ex) {
-                        ret.completeExceptionally(ex);
+                    public Reader getBody() {
+                        return Objects.requireNonNull(response.body()).charStream();
+                    }
+
+                    @Override
+                    public void close() {
+                        response.close();
                     }
                 });
-        return ret;
+            }
+
+            @Override
+            public void onFailure(Call okCall, IOException ex) {
+                callback.accept(ex, null);
+            }
+        });
     }
 
     private RequestBody createBody(Object body) {
         if (body == null) {
             return null;
         }
-        StringWriter sw = new StringWriter();
+
+        StringBuilderWriter sw = new StringBuilderWriter();
         try {
             serializer.serialize(sw, body);
         } catch (IOException e) {
             throw new RuntimeException("Failed to encode body", e);
         }
-        return RequestBody.create(APPLICATION_JSON, sw.toString());
+        return RequestBody.create(OKHTTP_CONTENT_TYPE, sw.toString());
     }
 
     private static <T> T initDefault(T a, T b) {

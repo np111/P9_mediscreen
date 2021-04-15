@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Data
-public class RestCall<T> {
+public final class RestCall<T> {
     final Class<?> responseType;
     final boolean responseIsList;
     final List<String> paths = new ArrayList<>();
@@ -49,6 +49,18 @@ public class RestCall<T> {
 
     public RestCall<T> post(@NonNull Object body) {
         return this.method("POST").body(body);
+    }
+
+    public RestCall<T> put(@NonNull Object body) {
+        return this.method("PUT").body(body);
+    }
+
+    public RestCall<T> patch(@NonNull Object body) {
+        return this.method("PATCH").body(body);
+    }
+
+    public RestCall<T> delete() {
+        return this.method("DELETE");
     }
 
     public RestCall<T> apply(Consumer<RestCall<T>> consumer) {

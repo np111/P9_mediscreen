@@ -3,6 +3,11 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <!--
+  - This pom.xml should be used as a parent for all our spring boot modules.
+  - It provides the default dependencies and configuration.
+  -->
+
   <parent>
     <groupId>com.mediscreen</groupId>
     <artifactId>mediscreen</artifactId>
@@ -44,7 +49,8 @@
           <version>${maven-compiler-plugin.version}</version>
           <configuration>
             <!-- Add annotations processors -->
-            <!-- TODO: Prevent annotationProcessorPaths duplication between parent/child pom -->
+            <!-- TODO: Prevent annotationProcessorPaths duplication between parent/child pom. -->
+            <!-- TODO: (this seem currently impossible; a possible workaround is maybe to create a maven plugin to handle this) -->
             <annotationProcessorPaths>
               <!-- * Lombok -->
               <path>

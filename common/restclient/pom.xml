@@ -17,6 +17,10 @@
       <groupId>com.mediscreen</groupId>
       <artifactId>mediscreen-common-api</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.mediscreen</groupId>
+      <artifactId>mediscreen-common-util</artifactId>
+    </dependency>
 
     <dependency>
       <groupId>com.squareup.okhttp3</groupId>

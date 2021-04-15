@@ -5,6 +5,9 @@ import java.io.Reader;
 import java.io.Writer;
 import java.util.List;
 
+/**
+ * A serializer to perform REST body serialization and deserialization in JSON.
+ */
 public interface RestSerializer {
     void serialize(Writer dst, Object value) throws IOException;
 

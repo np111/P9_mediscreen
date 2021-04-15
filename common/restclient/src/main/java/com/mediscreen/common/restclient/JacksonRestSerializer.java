@@ -8,6 +8,9 @@ import java.util.List;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * A {@link RestSerializer} implementation using the Jackson library.
+ */
 @RequiredArgsConstructor
 public class JacksonRestSerializer implements RestSerializer {
     private final @NonNull ObjectMapper objectMapper;

@@ -20,6 +20,7 @@ import org.springframework.web.method.HandlerMethod;
 public class ValidationCustomizer implements OperationCustomizer {
     private final ApiErrorCustomizer apiErrorCustomizer;
 
+    @Override
     public Operation customize(Operation operation, HandlerMethod handlerMethod) {
         if (handlerMethod.getMethod().getDeclaringClass().isAnnotationPresent(Validated.class)) {
             List<ConstraintsDescriptor.Description> constraints = ConstraintsDescriptor.describeParameters(handlerMethod.getMethod());
