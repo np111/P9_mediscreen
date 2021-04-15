@@ -1,3 +1,11 @@
 ---
 server:
   port: '${SERVER_PORT:8083}'
+
+mediscreen:
+  patients-service:
+    base-url: '${PATIENTS_SERVICE_BASE_URL:http://localhost:8081/}'
+    max-concurrent-requests: '${PATIENTS_SERVICE_MAX_REQUESTS:128}'
+  notes-service:
+    base-url: '${NOTES_SERVICE_BASE_URL:http://localhost:8082/}'
+    max-concurrent-requests: '${NOTES_SERVICE_MAX_REQUESTS:128}'

@@ -1,6 +1,7 @@
 package com.mediscreen.assessment.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mediscreen.assessment.properties.NotesServiceProperties;
 import com.mediscreen.assessment.service.NotesClient;
 import com.mediscreen.common.restclient.JacksonRestSerializer;
 import com.mediscreen.common.restclient.OkHttpRestClient;
@@ -17,9 +18,10 @@ public class HttpNotesClient implements NotesClient {
     private final RestClient restClient;
 
     @Autowired
-    public HttpNotesClient(ObjectMapper objectMapper) {
+    public HttpNotesClient(ObjectMapper objectMapper, NotesServiceProperties props) {
         restClient = OkHttpRestClient.builder()
-                .baseUrl("http://localhost:8082/") // TODO: Properties
+                .baseUrl(props.getBaseUrl())
+                .maxRequests(props.getMaxConcurrentRequests())
                 .serializer(new JacksonRestSerializer(objectMapper))
                 .build();
     }

@@ -53,7 +53,7 @@ public class AssessmentController {
         return new ResponseEntity<>(ApiError.builder()
                 .type(ApiErrorType.SERVICE)
                 .code("INCOMPLETE_PATIENT")
-                .message("Patient is incomplete")
+                .message("Patient is incomplete (birthdate or gender is missing)")
                 .metadata("field", ex.getField())
                 .build(), HttpStatus.NOT_FOUND);
     }

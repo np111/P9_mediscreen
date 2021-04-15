@@ -1,6 +1,7 @@
 package com.mediscreen.assessment.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mediscreen.assessment.properties.PatientsServiceProperties;
 import com.mediscreen.assessment.service.PatientsClient;
 import com.mediscreen.common.restclient.JacksonRestSerializer;
 import com.mediscreen.common.restclient.OkHttpRestClient;
@@ -18,9 +19,10 @@ public class HttpPatientsClient implements PatientsClient {
     private final RestClient restClient;
 
     @Autowired
-    public HttpPatientsClient(ObjectMapper objectMapper) {
+    public HttpPatientsClient(ObjectMapper objectMapper, PatientsServiceProperties props) {
         restClient = OkHttpRestClient.builder()
-                .baseUrl("http://localhost:8081/") // TODO: Properties
+                .baseUrl(props.getBaseUrl())
+                .maxRequests(props.getMaxConcurrentRequests())
                 .serializer(new JacksonRestSerializer(objectMapper))
                 .build();
     }
