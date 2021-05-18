@@ -12,7 +12,13 @@ import lombok.With;
 public class PhoneCountry {
     String regionCode;
 
+    /**
+     * The country calling code (eg. 33 for France).
+     */
     Integer callingCode;
 
+    /**
+     * The full country name.
+     */
     String name;
 }

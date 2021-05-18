@@ -9,6 +9,11 @@ import javax.validation.Constraint;
 import javax.validation.ConstraintValidator;
 import javax.validation.Payload;
 
+/**
+ * The annotated {@link String} must be a lower-case ISO 3166-1 alpha-2 country code.
+ * <p>
+ * {@code null} elements are considered valid.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR,
         ElementType.PARAMETER, ElementType.TYPE_USE})

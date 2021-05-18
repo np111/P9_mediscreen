@@ -10,6 +10,9 @@ import lombok.Builder;
 import lombok.Value;
 import lombok.With;
 
+/**
+ * A medical note about a patient.
+ */
 @Builder(builderClassName = "Builder", toBuilder = true)
 @Value
 @With

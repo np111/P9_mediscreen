@@ -9,6 +9,11 @@ import javax.validation.Constraint;
 import javax.validation.ConstraintValidator;
 import javax.validation.Payload;
 
+/**
+ * The annotated {@link String} must be a phone number (formatted as "[country-calling-code][space][number]").
+ * <p>
+ * {@code null} elements are considered valid.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR,
         ElementType.PARAMETER, ElementType.TYPE_USE})

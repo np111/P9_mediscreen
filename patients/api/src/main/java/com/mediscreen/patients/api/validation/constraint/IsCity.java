@@ -9,6 +9,11 @@ import javax.validation.Constraint;
 import javax.validation.ConstraintValidator;
 import javax.validation.Payload;
 
+/**
+ * The annotated {@link String} must be a city.
+ * <p>
+ * {@code null} elements are considered valid.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR,
         ElementType.PARAMETER, ElementType.TYPE_USE})
@@ -21,6 +26,9 @@ public @interface IsCity {
 
     Class<? extends Payload>[] payload() default {};
 
+    /**
+     * Whether or not the content must be strictly validated. Otherwise only the length is validated.
+     */
     boolean strict() default false;
 
     interface Validator extends ConstraintValidator<IsCity, String> {
