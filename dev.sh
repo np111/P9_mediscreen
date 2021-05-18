@@ -14,6 +14,7 @@ function print_usage() {
   echo "${green} docker down${reset}           Stop and remove development containers"
   echo "${green} docker logs${reset}           Print development containers logs"
   echo "${green} iso3166-update${reset}        Update ISO 3166 data"
+  echo "${green} docs${reset}                  Update/publish documentation"
   echo "${green} db-migration <desc>${reset}   Print flyway database migration filename"
   echo "${green} db-changelog <desc>${reset}   Print mongobee migration (changelog) filename"
 }
@@ -38,6 +39,9 @@ function main() {
     ;;
   iso3166-update)
     .dev/iso3166-update.sh "$@"
+    ;;
+  docs)
+    .dev/docs.sh "$@"
     ;;
   *)
     echo "${red2}Error: '${command}' is not a dev command.${reset2}" >&2
