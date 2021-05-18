@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,8 +35,10 @@ public class NoteController {
     private final NoteService noteService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<Note> listNotes() {
-        return noteService.list();
+    public List<Note> listNotes(
+            @RequestParam(name = "patientId", required = false) UUID patientId
+    ) {
+        return noteService.list(patientId);
     }
 
     @ApiErrorResponse(method = "handleNoteNotFoundException")

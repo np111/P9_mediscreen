@@ -26,8 +26,9 @@ public class NoteServiceImpl implements NoteService {
     private final TimeService timeService;
 
     @Override
-    public List<Note> list() {
-        return noteRepository.findAll().stream().map(noteMapper::toModel).collect(Collectors.toList());
+    public List<Note> list(UUID patientId) {
+        List<NoteEntity> notes = patientId == null ? noteRepository.findAll() : noteRepository.findAllByPatientId(patientId);
+        return notes.stream().map(noteMapper::toModel).collect(Collectors.toList());
     }
 
     @Override

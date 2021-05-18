@@ -10,9 +10,11 @@ import java.util.UUID;
  */
 public interface NoteService {
     /**
-     * Returns a list of all notes.
+     * Returns a list of all notes of a patient.
+     *
+     * @param patientId The concerned patient; or {@code null} for all
      */
-    List<Note> list();
+    List<Note> list(UUID patientId);
 
     /**
      * Returns the note with the given ID.
