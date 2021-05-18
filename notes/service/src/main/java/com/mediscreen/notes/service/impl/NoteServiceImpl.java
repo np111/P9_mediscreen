@@ -12,6 +12,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.TextCriteria;
@@ -26,7 +27,7 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public List<Note> list() {
-        return null; // TODO
+        return noteRepository.findAll().stream().map(noteMapper::toModel).collect(Collectors.toList());
     }
 
     @Override

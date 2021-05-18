@@ -10,6 +10,7 @@ import com.mediscreen.patients.service.PatientService;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class PatientServiceImpl implements PatientService {
     @Override
     @Transactional(readOnly = true)
     public List<Patient> list() {
-        return null; // TODO
+        return patientRepository.findAll().stream().map(patientMapper::toModel).collect(Collectors.toList());
     }
 
     @Override

@@ -23,8 +23,6 @@ public @interface ApiErrorResponse {
 
     String message() default "";
 
-    // TODO: metadata?
-
     int status() default 0;
 
     String method() default "";

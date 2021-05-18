@@ -10,6 +10,7 @@ import com.mediscreen.notes.api.model.NoteSearchTermRequest;
 import com.mediscreen.notes.api.model.NoteSearchTermResult;
 import com.mediscreen.notes.exception.NoteNotFoundException;
 import com.mediscreen.notes.service.NoteService;
+import java.util.List;
 import java.util.UUID;
 import javax.validation.groups.Default;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,11 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 public class NoteController {
     private final NoteService noteService;
+
+    @RequestMapping(method = RequestMethod.GET)
+    public List<Note> listNotes() {
+        return noteService.list();
+    }
 
     @ApiErrorResponse(method = "handleNoteNotFoundException")
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")

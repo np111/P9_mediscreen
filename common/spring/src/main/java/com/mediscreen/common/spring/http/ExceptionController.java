@@ -134,7 +134,7 @@ public class ExceptionController {
             String message = fieldError.get().getDefaultMessage();
             String parameter = fieldError.get().getField();
             String constraint = fieldError.get().getCode();
-            // TODO: retrieves attributes
+            // OPT: also retrieves attributes
             return errorValidationFailed(message, parameter, constraint, null);
         }
 
@@ -142,7 +142,7 @@ public class ExceptionController {
         ObjectError objectError = ex.getBindingResult().getAllErrors().get(0);
         String message = objectError.getDefaultMessage();
         String constraint = objectError.getCode();
-        // TODO: retrieves attributes
+        // OPT: also retrieves attributes
         return errorValidationFailed(message, null, constraint, null);
     }
 

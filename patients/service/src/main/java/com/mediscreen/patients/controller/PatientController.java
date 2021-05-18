@@ -8,6 +8,7 @@ import com.mediscreen.common.spring.openapi.error.ApiErrorResponse;
 import com.mediscreen.patients.api.model.Patient;
 import com.mediscreen.patients.exception.PatientNotFoundException;
 import com.mediscreen.patients.service.PatientService;
+import java.util.List;
 import java.util.UUID;
 import javax.validation.groups.Default;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,11 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 public class PatientController {
     private final PatientService patientService;
+
+    @RequestMapping(method = RequestMethod.GET)
+    public List<Patient> listPatients() {
+        return patientService.list();
+    }
 
     @ApiErrorResponse(method = "handlePatientNotFoundException")
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
