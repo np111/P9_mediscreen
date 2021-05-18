@@ -1,0 +1,51 @@
+version: '3.4'
+services:
+  sql-db:
+    image: mariadb:10.5
+    environment:
+      MYSQL_ROOT_PASSWORD: mediscreen
+      MYSQL_USER: mediscreen
+      MYSQL_PASSWORD: mediscreen
+      MYSQL_DATABASE: mediscreen-patients
+  mongo-db:
+    image: mongo:4.4
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mediscreen
+      MONGO_INITDB_ROOT_PASSWORD: mediscreen
+  patients-service:
+    build:
+      context: .
+      target: patients
+    environment:
+      - SERVER_PORT=8081
+      - MARIADB_HOST=sql-db
+      - MARIADB_PORT=3306
+      - MARIADB_USERNAME=mediscreen
+      - MARIADB_PASSWORD=mediscreen
+      - MARIADB_DATABASE=mediscreen-patients
+    ports:
+      - 8081:8081
+    links:
+      - sql-db
+  notes-service:
+    build:
+      context: .
+      target: notes
+    environment:
+      - SERVER_PORT=8082
+      - MONGODB_URI=mongodb://mediscreen:mediscreen@mongo-db:27017/mediscreen?authSource=admin
+    ports:
+      - 8082:8082
+    links:
+      - mongo-db
+  assessment-service:
+    build:
+      context: .
+      target: assessment
+    environment:
+      - SERVER_PORT=8083
+    ports:
+      - 8083:8083
+    links:
+      - patients-service
+      - notes-service
