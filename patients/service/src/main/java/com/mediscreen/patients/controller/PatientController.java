@@ -8,6 +8,7 @@ import com.mediscreen.common.spring.openapi.error.ApiErrorResponse;
 import com.mediscreen.patients.api.model.Patient;
 import com.mediscreen.patients.exception.PatientNotFoundException;
 import com.mediscreen.patients.service.PatientService;
+import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import java.util.UUID;
 import javax.validation.groups.Default;
@@ -31,11 +32,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class PatientController {
     private final PatientService patientService;
 
+    @Operation(
+            summary = "List the patients",
+            description = "Returns the list of all patients."
+    )
     @RequestMapping(method = RequestMethod.GET)
     public List<Patient> listPatients() {
         return patientService.list();
     }
 
+    @Operation(
+            summary = "Return a patient",
+            description = "Returns the patient with the matching ID."
+    )
     @ApiErrorResponse(method = "handlePatientNotFoundException")
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
     public Patient getPatient(
@@ -44,6 +53,11 @@ public class PatientController {
         return patientService.get(id);
     }
 
+    @Operation(
+            summary = "Create a new patient",
+            description = "Creates a new patient, then returns it."
+                    + "<br/>\nNote: ID is automatically generated."
+    )
     @RequestMapping(method = RequestMethod.POST)
     public Patient createPatient(
             @RequestBody @Validated({Default.class, Create.class}) Patient patient
@@ -51,6 +65,11 @@ public class PatientController {
         return patientService.create(patient);
     }
 
+    @Operation(
+            summary = "Update an existing patient",
+            description = "Updates the patient with the matching ID, then returns it."
+                    + "<br/>\nNote: ID can't be updated."
+    )
     @ApiErrorResponse(method = "handlePatientNotFoundException")
     @RequestMapping(method = RequestMethod.POST, value = "/{id}")
     public Patient updatePatient(
@@ -60,6 +79,10 @@ public class PatientController {
         return patientService.update(id, patient);
     }
 
+    @Operation(
+            summary = "Delete an existing patient",
+            description = "Deletes the patient with the matching ID."
+    )
     @ApiErrorResponse(method = "handlePatientNotFoundException")
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
     public void deletePatient(

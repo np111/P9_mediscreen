@@ -8,6 +8,7 @@ import com.mediscreen.assessment.service.AssessmentService;
 import com.mediscreen.common.api.model.ApiError;
 import com.mediscreen.common.api.model.ApiErrorType;
 import com.mediscreen.common.spring.openapi.error.ApiErrorResponse;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class AssessmentController {
     private final AssessmentService assessmentService;
 
+    @Operation(
+            summary = "Assess the risk level of a patient"
+    )
     @ApiErrorResponse(method = "handlePatientNotFoundException")
     @ApiErrorResponse(method = "handleIncompletePatientException")
     @RequestMapping(method = RequestMethod.POST)

@@ -7,6 +7,8 @@ import com.mediscreen.patients.api.model.ParsePhoneNumberRequest;
 import com.mediscreen.patients.api.model.PhoneCountries;
 import com.mediscreen.patients.exception.InvalidPhoneNumberException;
 import com.mediscreen.patients.service.PhoneNumberService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import javax.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +30,23 @@ import org.springframework.web.bind.annotation.RestController;
 public class PhoneNumberController {
     private final PhoneNumberService phoneNumberService;
 
+    @Operation(
+            summary = "List the supported phone-countries",
+            description = "Returns the list of all supported phone-countries."
+    )
     @RequestMapping(method = RequestMethod.GET, value = "/country")
     public PhoneCountries listPhoneCountries(
+            @Parameter(description = "The language in which the phone-country names should be returned."
+                    + "<br/>\nFall-back to english (\"en-US\") if the locale is unknown or unsupported.")
             @RequestParam(name = "locale", required = false) @Size(max = 255) String locale
     ) {
         return phoneNumberService.getLocalizedPhoneCountries(locale);
     }
 
+    @Operation(
+            summary = "Parse a phone number input",
+            description = "Parse a phone number entered by a user and returns the API compliant version (eg. \"33 612345678\")."
+    )
     @ApiErrorResponse(
             description = "Unable to parse and validate the given phone number",
             method = "handlePhoneNumberParseException"
