@@ -76,7 +76,11 @@ public class NoteServiceImpl implements NoteService {
     public boolean[] searchTerms(UUID patientId, List<String> terms) {
         boolean[] ret = new boolean[terms.size()];
         for (int i = 0; i < terms.size(); i++) {
-            ret[i] = noteRepository.existsByPatientId(patientId, new TextCriteria().matching(terms.get(i)));
+            String term = terms.get(i);
+            if (term.contains(" ")) {
+                term = "\"" + term + "\"";
+            }
+            ret[i] = noteRepository.existsByPatientId(patientId, new TextCriteria().matching(term));
         }
         return ret;
     }

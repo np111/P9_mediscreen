@@ -12,14 +12,14 @@ import com.mediscreen.notes.api.model.NoteSearchTermRequest;
 import com.mediscreen.notes.api.model.NoteSearchTermResult;
 import com.mediscreen.patients.api.model.Gender;
 import com.mediscreen.patients.api.model.Patient;
-import java.time.LocalDate;
 import java.time.Period;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
-import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,17 +47,20 @@ public class AssessmentServiceImpl implements AssessmentService {
 
         NoteSearchTermResult res = notesClient.searchTerm(NoteSearchTermRequest.builder()
                 .patientId(patientId)
-                .terms(Arrays.stream(RiskTerm.values()).map(r -> "\"" + r.getTerm() + "\"").collect(Collectors.toList()))
+                .terms(RiskTerm.getAllPhrases())
                 .build()).join();
-        List<String> terms = IntStream.range(0, RiskTerm.values().length)
-                .mapToObj(i -> res.getMatches()[i] ? RiskTerm.values()[i].getTerm() : null)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
-        int termsCount = terms.size();
+        Set<RiskTerm> matchingTerms = EnumSet.noneOf(RiskTerm.class);
+        boolean[] matches = res.getMatches();
+        for (int i = 0; i < matches.length; i++) {
+            if (matches[i]) {
+                matchingTerms.add(RiskTerm.byPhraseIndex(i));
+            }
+        }
+        int matchingTermsCount = matchingTerms.size();
 
         return CheckRiskResult.builder()
-                .riskLevel(determineRiskLevel(patient, termsCount))
-                .terms(terms)
+                .riskLevel(determineRiskLevel(patient, matchingTermsCount))
+                .terms(matchingTerms.stream().map(t -> t.getPhrases()[0]).collect(Collectors.toList()))
                 .build();
     }
 
@@ -85,21 +88,49 @@ public class AssessmentServiceImpl implements AssessmentService {
         return RiskLevel.NONE;
     }
 
-    @RequiredArgsConstructor
     @Getter
     private enum RiskTerm {
-        HEMOGLOBIN_A1C("hemoglobin a1c"),
-        MICROALBUMIN("microalbumin"),
-        HEIGHT("height"),
-        WEIGHT("weight"),
-        SMOKER("smoker"),
-        ABNORMAL("abnormal"),
+        HEMOGLOBIN_A1C("hemoglobin a1c", "hemoglobine a1c"),
+        MICROALBUMIN("microalbumin", "microalbumine"),
+        HEIGHT("height", "taille"),
+        WEIGHT("weight", "poids"),
+        SMOKER("smoker", "fumeur"),
+        ABNORMAL("abnormal", "anormal"),
         CHOLESTEROL("cholesterol"),
-        DIZZINESS("dizziness"),
+        RELAPSE("relapse", "rechute"),
+        DIZZINESS("dizziness", "vertige"),
         REACTION("reaction"),
-        ANTIBODIES("antibodies"),
+        ANTIBODIES("antibodies", "anticorps"),
         ;
 
-        private final String term;
+        private static final List<String> ALL_PHRASES;
+        private static final List<RiskTerm> BY_PHRASE_INDEX;
+
+        static {
+            List<String> allPhrases = new ArrayList<>();
+            List<RiskTerm> byPhraseIndex = new ArrayList<>();
+            for (RiskTerm riskTerm : values()) {
+                for (String term : riskTerm.getPhrases()) {
+                    allPhrases.add(term);
+                    byPhraseIndex.add(riskTerm);
+                }
+            }
+            ALL_PHRASES = Collections.unmodifiableList(allPhrases);
+            BY_PHRASE_INDEX = Collections.unmodifiableList(byPhraseIndex);
+        }
+
+        public static List<String> getAllPhrases() {
+            return ALL_PHRASES;
+        }
+
+        public static RiskTerm byPhraseIndex(int i) {
+            return BY_PHRASE_INDEX.get(i);
+        }
+
+        private final String[] phrases;
+
+        RiskTerm(String... phrases) {
+            this.phrases = phrases;
+        }
     }
 }
