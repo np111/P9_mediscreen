@@ -44,6 +44,8 @@ services:
       target: assessment
     environment:
       - SERVER_PORT=8083
+      - PATIENTS_SERVICE_BASE_URL=http://patients-service:8081/
+      - NOTES_SERVICE_BASE_URL=http://notes-service:8082/
     ports:
       - 8083:8083
     links:
