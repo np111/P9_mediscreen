@@ -1,7 +1,9 @@
 package com.mediscreen.common.spring.config;
 
+import com.mediscreen.common.spring.properties.SecurityProperties;
 import com.mediscreen.common.spring.validation.SpringConstraintValidatorFactoryEx;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -28,8 +31,18 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @Configuration
 @EnableWebMvc
 public class WebMvcConfig implements WebMvcConfigurer, BeanPostProcessor {
+    private final SecurityProperties securityProps;
     private final Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder;
     private final SpringConstraintValidatorFactoryEx constraintValidatorFactory;
+
+    @Override
+    public void addCorsMappings(CorsRegistry cors) {
+        cors.addMapping("/**")
+                .allowedOrigins(securityProps.getAllowedOrigins().toArray(new String[0]))
+                .allowedMethods("*")
+                .allowedHeaders("*")
+                .maxAge(TimeUnit.DAYS.toSeconds(1));
+    }
 
     @Bean
     @Primary

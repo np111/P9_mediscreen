@@ -35,3 +35,7 @@ logging:
     # Disable useless hibernate warnings
     org.hibernate.engine.jdbc.spi.SqlExceptionHelper: FATAL
     org.hibernate.persister.entity: ERROR
+
+mediscreen:
+  security:
+    allowed-origins: "${SECURITY_ALLOWED_ORIGINS:http://localhost:3000}"
