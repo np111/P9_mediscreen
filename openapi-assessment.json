@@ -1,0 +1,159 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "OpenAPI definition",
+    "version": "v0",
+    "description": "<a href=\"https://github.com/np111/P9_mediscreen\">View Source on GitHub</a>"
+  },
+  "servers": [],
+  "paths": {
+    "/assessment": {
+      "post": {
+        "tags": [
+          "assessment-controller"
+        ],
+        "summary": "Assess the risk level of a patient",
+        "operationId": "checkRisk",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckRiskRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckRiskResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "`CLIENT`/`VALIDATION_FAILED` - A request parameter validation failed:\n- *body*: NotNull\n  - *patientId*: NotNull",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "type": "CLIENT",
+                  "code": "VALIDATION_FAILED",
+                  "message": "Validation failed: {{message}}",
+                  "metadata": {
+                    "parameter": "{{request parameter name}}",
+                    "constraint": "{{constraint class name}}",
+                    "{{constraint attribute}}": "{{value}}"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "`SERVICE`/`PATIENT_NOT_FOUND` - Patient does not exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "type": "SERVICE",
+                  "code": "PATIENT_NOT_FOUND",
+                  "message": "Patient does not exists",
+                  "metadata": {
+                    "id": "00000000-0000-0000-0000-000000000000"
+                  }
+                }
+              }
+            }
+          },
+          "404'": {
+            "description": "`SERVICE`/`INCOMPLETE_PATIENT` - Patient is incomplete (birthdate or gender is missing)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "type": "SERVICE",
+                  "code": "INCOMPLETE_PATIENT",
+                  "message": "Patient is incomplete (birthdate or gender is missing)",
+                  "metadata": {
+                    "field": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CheckRiskRequest": {
+        "required": [
+          "patientId"
+        ],
+        "type": "object",
+        "properties": {
+          "patientId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "CheckRiskResult": {
+        "type": "object",
+        "properties": {
+          "riskLevel": {
+            "type": "string",
+            "enum": [
+              "NONE",
+              "BORDERLINE",
+              "IN_DANGER",
+              "EARLY_ONSET"
+            ]
+          },
+          "terms": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ApiError": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "CLIENT",
+              "SERVICE",
+              "UNKNOWN"
+            ]
+          },
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  }
+}

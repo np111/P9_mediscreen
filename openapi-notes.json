@@ -1,0 +1,451 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "OpenAPI definition",
+    "version": "v0",
+    "description": "<a href=\"https://github.com/np111/P9_mediscreen\">View Source on GitHub</a>"
+  },
+  "servers": [],
+  "paths": {
+    "/note": {
+      "get": {
+        "tags": [
+          "note-controller"
+        ],
+        "summary": "List the notes",
+        "description": "Returns the list of all notes.",
+        "operationId": "listNotes",
+        "parameters": [
+          {
+            "name": "patientId",
+            "in": "query",
+            "description": "If defined, only the notes of the patient with the matching ID are listed.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Note"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "note-controller"
+        ],
+        "summary": "Create a new note",
+        "description": "Creates a new note, then returns it.<br/>\nNote: ID, createdAt and updatedAt are automatically generated.",
+        "operationId": "createNote",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Note"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Note"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "`CLIENT`/`VALIDATION_FAILED` - A request parameter validation failed:\n- *body*: NotNull\n  - *patientId*: NotNull\n  - *content*: NotNull, Size(max=10000)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "type": "CLIENT",
+                  "code": "VALIDATION_FAILED",
+                  "message": "Validation failed: {{message}}",
+                  "metadata": {
+                    "parameter": "{{request parameter name}}",
+                    "constraint": "{{constraint class name}}",
+                    "{{constraint attribute}}": "{{value}}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/note/{id}": {
+      "get": {
+        "tags": [
+          "note-controller"
+        ],
+        "summary": "Return a note",
+        "description": "Returns the note with the matching ID.",
+        "operationId": "getNote",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Note"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "`CLIENT`/`VALIDATION_FAILED` - A request parameter validation failed:\n- *id*: NotNull",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "type": "CLIENT",
+                  "code": "VALIDATION_FAILED",
+                  "message": "Validation failed: {{message}}",
+                  "metadata": {
+                    "parameter": "{{request parameter name}}",
+                    "constraint": "{{constraint class name}}",
+                    "{{constraint attribute}}": "{{value}}"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "`SERVICE`/`NOTE_NOT_FOUND` - Note does not exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "type": "SERVICE",
+                  "code": "NOTE_NOT_FOUND",
+                  "message": "Note does not exists",
+                  "metadata": {
+                    "id": "00000000-0000-0000-0000-000000000000"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "note-controller"
+        ],
+        "summary": "Update an existing note",
+        "description": "Updates the note with the matching ID, then returns it.<br/>\nNote: ID and createdAt can't be updated; updatedAt is automatically updated.",
+        "operationId": "updateNote",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Note"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Note"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "`CLIENT`/`VALIDATION_FAILED` - A request parameter validation failed:\n- *id*: NotNull\n- *body*: NotNull\n  - *patientId*: NotNull\n  - *content*: NotNull, Size(max=10000)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "type": "CLIENT",
+                  "code": "VALIDATION_FAILED",
+                  "message": "Validation failed: {{message}}",
+                  "metadata": {
+                    "parameter": "{{request parameter name}}",
+                    "constraint": "{{constraint class name}}",
+                    "{{constraint attribute}}": "{{value}}"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "`SERVICE`/`NOTE_NOT_FOUND` - Note does not exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "type": "SERVICE",
+                  "code": "NOTE_NOT_FOUND",
+                  "message": "Note does not exists",
+                  "metadata": {
+                    "id": "00000000-0000-0000-0000-000000000000"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "note-controller"
+        ],
+        "summary": "Delete an existing note",
+        "description": "Deletes the note with the matching ID.",
+        "operationId": "deleteNote",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "`CLIENT`/`VALIDATION_FAILED` - A request parameter validation failed:\n- *id*: NotNull",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "type": "CLIENT",
+                  "code": "VALIDATION_FAILED",
+                  "message": "Validation failed: {{message}}",
+                  "metadata": {
+                    "parameter": "{{request parameter name}}",
+                    "constraint": "{{constraint class name}}",
+                    "{{constraint attribute}}": "{{value}}"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "`SERVICE`/`NOTE_NOT_FOUND` - Note does not exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "type": "SERVICE",
+                  "code": "NOTE_NOT_FOUND",
+                  "message": "Note does not exists",
+                  "metadata": {
+                    "id": "00000000-0000-0000-0000-000000000000"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/note/searchTerm": {
+      "post": {
+        "tags": [
+          "note-controller"
+        ],
+        "summary": "Search terms in a patient's notes",
+        "description": "Find out if the terms listed are present at least once in a patient's notes.<br/>\nThe results are returned as a list of booleans (in the same order as the list of terms).",
+        "operationId": "searchTerm",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NoteSearchTermRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoteSearchTermResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "`CLIENT`/`VALIDATION_FAILED` - A request parameter validation failed:\n- *body*: NotNull\n  - *patientId*: NotNull\n  - *terms*: NotEmpty\n    - *[entry]*: NotNull",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "type": "CLIENT",
+                  "code": "VALIDATION_FAILED",
+                  "message": "Validation failed: {{message}}",
+                  "metadata": {
+                    "parameter": "{{request parameter name}}",
+                    "constraint": "{{constraint class name}}",
+                    "{{constraint attribute}}": "{{value}}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Note": {
+        "required": [
+          "content",
+          "patientId"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "patientId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "content": {
+            "maxLength": 10000,
+            "minLength": 0,
+            "type": "string"
+          }
+        }
+      },
+      "NoteSearchTermRequest": {
+        "required": [
+          "patientId",
+          "terms"
+        ],
+        "type": "object",
+        "properties": {
+          "patientId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "terms": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "NoteSearchTermResult": {
+        "type": "object",
+        "properties": {
+          "matches": {
+            "type": "array",
+            "items": {
+              "type": "boolean"
+            }
+          }
+        }
+      },
+      "ApiError": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "CLIENT",
+              "SERVICE",
+              "UNKNOWN"
+            ]
+          },
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  }
+}
