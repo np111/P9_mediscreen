@@ -1,4 +1,5 @@
 # [![mediscreen](.readme/logo.png?raw=true)](https://github.com/np111/P9_mediscreen)
+
 ### \[ <ins>[backend](https://github.com/np111/P9_mediscreen#readme)</ins> | [webapp](https://github.com/np111/P9_mediscreen-webapp#readme) \]
 
 Mediscreen is an application used to track disease risks.
@@ -46,8 +47,16 @@ java -jar assessment/service/target/mediscreen-assessment-service.jar
 
 ### Testing
 
+Unit tests:
+
 ```bash
 mvn test
+```
+
+Integration & Unit tests (requires the development environment to be running):
+
+```bash
+mvn test -DintegrationTests=true
 ```
 
 ### Updating online documentation
