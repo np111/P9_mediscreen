@@ -2,6 +2,8 @@
 
 ### \[ <ins>[backend](https://github.com/np111/P9_mediscreen#readme)</ins> | [webapp](https://github.com/np111/P9_mediscreen-webapp#readme) \]
 
+[![build](https://github.com/np111/P9_mediscreen/actions/workflows/test.yml/badge.svg)](https://github.com/np111/P9_mediscreen/actions/workflows/test.yml) [![codecov.io](https://codecov.io/github/np111/P9_mediscreen/coverage.svg?branch=master)](https://codecov.io/github/np111/P9_mediscreen?branch=master)
+
 Mediscreen is an application used to track disease risks.
 
 ![Poster](.readme/poster.png?raw=true)
