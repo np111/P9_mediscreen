@@ -27,8 +27,7 @@ import static org.mockito.Mockito.verify;
         webEnvironment = WebEnvironment.NONE,
         classes = {
                 PatientServiceImpl.class,
-                PatientMapperImpl.class,
-                PatientMockData.class
+                PatientMapperImpl.class
         })
 @Import({TestConfig.class})
 class PatientServiceTest {

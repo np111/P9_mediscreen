@@ -1,0 +1,26 @@
+com.mediscreen.patients.controller.CountryControllerTest.listCountries=[
+-
+> GET /country?locale=en
+< HTTP 200
+< Vary: Origin
+< Vary: Access-Control-Request-Method
+< Vary: Access-Control-Request-Headers
+< Content-Type: application/json
+"{\"locale\":\"en\",\"countries\":{\"us\":{\"name\":\"United States\"},\"fr\":{\"name\":\"France\"}}}"
+-
+> GET /country?locale=fr
+< HTTP 200
+< Vary: Origin
+< Vary: Access-Control-Request-Method
+< Vary: Access-Control-Request-Headers
+< Content-Type: application/json
+"{\"locale\":\"fr\",\"countries\":{\"us\":{\"name\":\"United States\"},\"fr\":{\"name\":\"France\"}}}"
+-
+> GET /country?locale=too_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_longtoo_long
+< HTTP 400
+< Vary: Origin
+< Vary: Access-Control-Request-Method
+< Vary: Access-Control-Request-Headers
+< Content-Type: application/json
+"{\"type\":\"CLIENT\",\"code\":\"VALIDATION_FAILED\",\"message\":\"Validation failed: locale size must be between 0 and 255\",\"metadata\":{\"parameter\":\"locale\",\"constraint\":\"Size\",\"min\":0,\"max\":255}}"
+]

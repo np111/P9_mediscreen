@@ -53,6 +53,7 @@
     <libphonenumber.version>8.12.20</libphonenumber.version>
     <springdoc-openapi.version>1.5.6</springdoc-openapi.version>
     <jacoco.version>0.8.6</jacoco.version>
+    <java-snapshot-testing.version>2.2.2</java-snapshot-testing.version>
   </properties>
 
   <dependencyManagement>
@@ -128,6 +129,17 @@
         <groupId>org.mockito</groupId>
         <artifactId>mockito-junit-jupiter</artifactId>
         <version>${mockito-junit-jupiter.version}</version>
+      </dependency>
+      <!-- * java-snapshot-testing -->
+      <dependency>
+        <groupId>io.github.origin-energy</groupId>
+        <artifactId>java-snapshot-testing-core</artifactId>
+        <version>${java-snapshot-testing.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.github.origin-energy</groupId>
+        <artifactId>java-snapshot-testing-junit5</artifactId>
+        <version>${java-snapshot-testing.version}</version>
       </dependency>
 
       <!-- Sub-modules -->

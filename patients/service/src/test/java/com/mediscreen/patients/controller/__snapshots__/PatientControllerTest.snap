@@ -1,0 +1,49 @@
+com.mediscreen.patients.controller.PatientControllerTest.deletePatient=[
+-
+> DELETE /patient/b650a2bf-08e1-43ea-965d-f0b87ac21bfb
+< HTTP 204
+< Vary: Origin
+< Vary: Access-Control-Request-Method
+< Vary: Access-Control-Request-Headers
+""
+-
+> DELETE /patient/23f40323-d9b7-4b75-bad7-670ed1187d5a
+< HTTP 404
+< Vary: Origin
+< Vary: Access-Control-Request-Method
+< Vary: Access-Control-Request-Headers
+< Content-Type: application/json
+"{\"type\":\"SERVICE\",\"code\":\"PATIENT_NOT_FOUND\",\"message\":\"Patient does not exists\",\"metadata\":{\"id\":\"23f40323-d9b7-4b75-bad7-670ed1187d5a\"}}"
+]
+
+
+com.mediscreen.patients.controller.PatientControllerTest.getPatient=[
+-
+> GET /patient/b650a2bf-08e1-43ea-965d-f0b87ac21bfb
+< HTTP 200
+< Vary: Origin
+< Vary: Access-Control-Request-Method
+< Vary: Access-Control-Request-Headers
+< Content-Type: application/json
+"{\"id\":\"b650a2bf-08e1-43ea-965d-f0b87ac21bfb\",\"firstName\":\"John\",\"lastName\":\"Smith\"}"
+-
+> GET /patient/23f40323-d9b7-4b75-bad7-670ed1187d5a
+< HTTP 404
+< Vary: Origin
+< Vary: Access-Control-Request-Method
+< Vary: Access-Control-Request-Headers
+< Content-Type: application/json
+"{\"type\":\"SERVICE\",\"code\":\"PATIENT_NOT_FOUND\",\"message\":\"Patient does not exists\",\"metadata\":{\"id\":\"23f40323-d9b7-4b75-bad7-670ed1187d5a\"}}"
+]
+
+
+com.mediscreen.patients.controller.PatientControllerTest.listPatients=[
+-
+> GET /patient
+< HTTP 200
+< Vary: Origin
+< Vary: Access-Control-Request-Method
+< Vary: Access-Control-Request-Headers
+< Content-Type: application/json
+"[{\"id\":\"b650a2bf-08e1-43ea-965d-f0b87ac21bfb\",\"firstName\":\"John\",\"lastName\":\"Smith\"},{\"id\":\"23f40323-d9b7-4b75-bad7-670ed1187d5a\",\"firstName\":\"Mary\",\"lastName\":\"Johnson\"}]"
+]
