@@ -64,7 +64,7 @@ public class AssessmentServiceImpl implements AssessmentService {
                 .build();
     }
 
-    private RiskLevel determineRiskLevel(Patient patient, int termsCount) {
+    public RiskLevel determineRiskLevel(Patient patient, int termsCount) {
         int age = Period.between(patient.getBirthdate(), timeService.now().toLocalDate()).getYears();
         if (age < 30) {
             boolean male = patient.getGender() == Gender.MALE;
