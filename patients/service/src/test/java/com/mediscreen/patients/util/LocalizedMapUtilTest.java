@@ -20,6 +20,8 @@ class LocalizedMapUtilTest {
         assertEquals(2, LocalizedMapUtil.get(map, "fr-CA"));
         assertEquals(3, LocalizedMapUtil.get(map, "en-US"));
         assertNull(LocalizedMapUtil.get(map, "en"));
+        assertNull(LocalizedMapUtil.get(map, "en-CA"));
+        assertNull(LocalizedMapUtil.get(map, null));
         assertEquals(0, LocalizedMapUtil.get(map, "en", 0));
     }
 }
